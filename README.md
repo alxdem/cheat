@@ -98,3 +98,8 @@ const {role = 'user'} = person;
 
 console.log(role); // user
 ```
+
+Можно задать значение по умолчанию у вложенного объекта (permissions), но нужно сделать проверку, если такого объекта нет - ставим ему значение по умолчанию (пустой объект):
+```javascript
+const {permissions: {role = 'user'} = {}} = person;
+```
