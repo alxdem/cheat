@@ -83,3 +83,18 @@ const {name: {first: firstName, last: lastName}} = person;
 console.log(firstName, lastName); // Peter Smith
 ```
 Здесь сразу помещаем значения в новые переменные firstName и lastName.
+
+Можно задать значение по умолчанию, если его не окажется в объекте:
+```javascript
+const person = {
+  name: {
+    first: 'Peter',
+    last: 'Smith',
+  },
+  age: 28
+};
+
+const {role = 'user'} = person;
+
+console.log(role); // user
+```
