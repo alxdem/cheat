@@ -1,4 +1,4 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Шпаргалка по ECMAScript 2019 и React
 
 ## Available Scripts
 
