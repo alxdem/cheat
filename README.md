@@ -50,3 +50,36 @@ const shallowCopy = [...arr1, ...arr2, 41];
 
 console.log(shallowCopy); // [1, 4, 8, 3, 6, 5, 41]
 ```
+
+### Деструктуризация объектов
+
+Позволяет вытащить сразу несколько переменных из объекта, вместо того, чтобы делать это с каждой:
+```javascript
+const person = {
+  name: {
+    first: 'Peter',
+    last: 'Smith',
+  },
+  age: 28
+};
+
+const {firstName, lastName} = person;
+
+console.log(firstName, lastName); // Peter Smith
+```
+
+Если нужные значения лежат внутри вложенного объекта:
+```javascript
+const person = {
+  name: {
+    first: 'Peter',
+    last: 'Smith',
+  },
+  age: 28
+};
+
+const {name: {first: firstName, last: lastName}} = person;
+
+console.log(firstName, lastName); // Peter Smith
+```
+Здесь сразу помещаем значения в новые переменные firstName и lastName.
