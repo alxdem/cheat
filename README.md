@@ -4,9 +4,10 @@
 
 ### Параметры по умолчанию
 
+```javascript
 function testGo(count = 10, start = 4) {
     console.log(count, start);
 }
 
 testGo(); // 10, 4
-
+```
