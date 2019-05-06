@@ -103,3 +103,62 @@ console.log(role); // user
 ```javascript
 const {permissions: {role = 'user'} = {}} = person;
 ```
+
+Деструктуризация аргументов функции
+Вместо того, чтобы проверять параметры, задаем их по умолчанию:
+```javascript
+function connect({
+  host = 'localhost',
+  port = 2345,
+  user = 'guest' } = {}) {
+    // Тело функции
+}
+
+connect({
+  host: 'localhost',
+  port: 1829,
+  user: 'peter'
+});
+```
+В конце ставим по умолчанию пустой объект {} если функцию запустят без объекта
+
+### Деструктуризация массивов
+
+Достать числа из массива в переменные:
+```javascript
+const fib = [1, 1, 2, 4, 7, 11, 15, 19, 22];
+const [a, b, c] = fib;
+
+console.log(a, b, c);
+```
+
+Достать числа не по порядку, 2-е и 5-е. Пропуски отделяем запятыми:
+```javascript
+const [, a, , , b] = fib;
+
+console.log(a, b); // 1, 7
+```
+
+Вывести данные из многомерного массива:
+```javascript
+const line = [ [10, 17], [14, 7] ];
+const [ [p1x, p1y], [p2x, p2y] ] = line;
+
+console.log(p1x, p1y, p2x, p2y);
+```
+
+Присвоить значение по умолчанию:
+```javascript
+const people = ['chris', 'sandra'];
+const [a, b, c = 'guest'] = people;
+
+console.log(a, b, c);
+```
+
+Рест-элементы:
+```javascript
+const people = ['chris', 'sandra', 'bob'];
+const [a, ...others] = people;
+
+console.log(others); // ['sandra', 'bob']
+```
