@@ -162,3 +162,132 @@ const [a, ...others] = people;
 
 console.log(others); // ['sandra', 'bob']
 ```
+
+Разбиваем объект на массивы ключ-значение:
+```javascript
+const dict = {
+  duck: 'quack',
+  dog: 'wuff',
+  mouse: 'squeak',
+  hamster: 'squeak'
+};
+
+const res = Object.entries(dict);
+
+console.log(res); // ["duck", "quack"], ["dog", "wuff"], ["mouse", "squeak"], ["hamster", "squeak"]
+```
+
+С помощью функции фильтра оставляем только тех, у кого значение (2 элемент) = squeak
+```javascript
+const res = Object.entries(dict)
+  .filter((arr) => arr[1] === 'squeak');
+
+console.log(res); // ["mouse", "squeak"], ["hamster", "squeak"]
+```
+
+То же самое, с деструктуризацией:
+```javascript
+const res = Object.entries(dict)
+  .filter(([key, value]) => value === 'squeak');
+```
+
+Запишем в переменную res только названия животных, подходящих под условие:
+```javascript
+const res = Object.entries(dict)
+  .filter(([key, value]) => value === 'squeak')
+  .map(([key]) => key);
+```
+
+### Шаблонные строки
+
+Можно вставлять переменные прямо в строки. Строки внутри символов бэктика(~)
+```javascript
+const user = 'Вася';
+const num = 18;
+const txt = 'Привет, ' + user + ' тебе пришло ' + num + ' сообщений';
+
+const txt2 = `Привет ${user} тебе пришло ${num} сообщений`;
+
+console.log(txt2); // Привет, Вася тебе пришло 18 сообщений
+```
+
+Внутри конструкции ${ } можно вставлять функции:
+```javascript
+const txt2 = `Сейчас ${Date.now()}`;
+
+console.log(txt2); // Сейчас 1557659743354
+```
+
+Внутри бэктиков строка при переносе не прерывается:
+```javascript
+const html =
+  '<ul>' +
+  '<li>Пункт 1</li>' +
+  '<li>Пункт 2</li>' +
+  '</ul>';
+
+const newHtml = `
+  <ul>
+    <li>Пункт 1</li>
+    <li>Пункт 2</li>
+  </ul>
+`;
+```
+
+Можно комбинировать со значениями:
+```javascript
+const items = ['чай', 'кофе'];
+
+const newHtml = `
+  <ul>
+    <li>${items[0]}</li>
+    <li>${items[1]}</li>
+  </ul>
+`;
+```
+
+### Объекты
+
+Значение в объекты стало записывать проще:
+```javascript
+const x = 1;
+const y = 3;
+
+const point = {
+  x: x,
+  y: y
+};
+
+const pointNew = {x, y};
+
+console.log(pointNew); // {x: 1, y: 3}
+```
+
+Объединить/перезаписать свойства объектов:
+```javascript
+const defaults = {
+  host: 'localhost',
+  dbName: 'blog',
+  user: 'admin'
+};
+
+const opts = {
+  user: 'jonh',
+  password: 'otopia'
+};
+
+const res = Object.assign({}, defaults, opts);
+
+console.log(res); // {host: "localhost", dbName: "blog", user: "jonh", password: "otopia"}
+```
+
+Скопировать объект:
+```javascript
+const defaults = {
+  host: 'localhost',
+  dbName: 'blog',
+  user: 'admin'
+};
+
+const schalloyCope = Object.assign({}, defaults); // Копия объекта defaults
+```
