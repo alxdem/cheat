@@ -291,3 +291,168 @@ const defaults = {
 
 const schalloyCope = Object.assign({}, defaults); // Копия объекта defaults
 ```
+
+### Spread оператор для объектов
+
+Старый способ:
+
+```javascript
+const defaults = {
+  host: 'localhost',
+  dbName: 'blog',
+  user: 'admin'
+};
+
+const opts = {
+  user: 'john',
+  password: 'utopia'
+};
+
+const res = Object.assign({}, defaults, opts); // Объект, куда записываем новые данные, объекты, которые записываем
+```
+
+Новый сопсоб:
+
+```javascript
+const result = {...defaults, ...opts};
+```
+
+Добавляем тут же новую переменную:
+
+```javascript
+const port = 8080;
+const result = {...defaults, ...opts, port};
+```
+
+### Прототипы
+
+Прототип - обычный объект.
+
+Сначала проверяется объект, есть ли у него искомое свойство. Если оно есть - оно и используется. Если его нет - проверяется прототип этого объекта. Если в прототипе есть искомое свойство - используется оно.
+
+Вместо: 
+
+```javascript
+const dog = {
+  name: 'dog',
+  voice: 'woof',
+  say: function() {
+    console.log(this.name, 'кричит', this.voice);
+  }
+};
+
+const cat = {
+  name: 'cat',
+  voice: 'meow',
+  say: function() {
+    console.log(this.name, 'кричит', this.voice);
+  }
+};
+```
+
+Выносим одинаковую функцию в прототип:
+
+```javascript
+const animal = {
+  say: function() {
+    console.log(this.name, 'кричит', this.voice);
+  }
+};
+
+const dog = {
+  name: 'dog',
+  voice: 'woof',
+};
+Object.setPrototypeOf(dog, animal); // animal - прототип объекта dog. Такой способ плохо скахывается на производительности
+
+const cat = {
+  name: 'cat',
+  voice: 'meow',
+};
+
+dog.say();
+```
+
+Лучше делать так:
+```javascript
+const dog = Object.create(animal); // В скобках указываем прототип
+dog.name = 'dog';
+dog.voice = 'woof';
+```
+
+Конечный вариаент:
+
+```javascript
+const animal = {
+  say: function() {
+    console.log(this.name, 'кричит', this.voice);
+  }
+};
+
+function createAnimal(name, voice) {
+  const result = Object.create(animal);
+  result.name = name;
+  result.voice = voice;
+  return result;
+}
+
+const dog = createAnimal('dog', 'woof');
+```
+
+Функция-конструктор называем с большой буквы:
+
+```javascript
+function Animal(name, voice) {
+  this.name = name;
+  this.voice = voice;
+}
+
+// Записываем в прототип Animal новый метод say
+Animal.prototype.say = function() {
+  console.log(this.name, 'кричит', this.voice);
+};
+
+const dog = new Animal('dog', 'woof');
+```
+
+Создать объект без прототипа:
+
+```javascript
+const obj = Object.create(null);
+```
+
+### Классы
+
+Классы - синтаксический сахар. За основу берут прототип
+
+```javascript
+class Animal {
+
+  constructor(name, voice) {
+    this.name = name;
+    this.voice = voice;
+  }
+
+  say() {
+    console.log(this.name, 'кричит', this.voice);
+  }
+
+};
+
+class Bird extends Animal { // extends говорит что классы Bird и Animal будут стоять в цепочке прототипов
+ constructor(name, voice, canFly) {
+    super(name, voice) // super - вызов конструктора супер-класса(родительского). Если мы наследуем класс, то обязательно вызываем супер-конструктор до того, как добавляем новое свойство
+    this.canFly = canFly;
+  }
+
+  say() {
+    console.log('Здесь переопределили метод конструктора Animal');
+  }
+}
+
+const duck = new Bird('duck', 'quack');
+// duck -> Bird.prototype -> Animal.prototype -> Object.prototype -> null
+```
+
+### Свойства классов
+
