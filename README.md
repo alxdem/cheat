@@ -456,3 +456,87 @@ const duck = new Bird('duck', 'quack');
 
 ### Свойства классов
 
+
+### Модули
+
+Есть 2 функции в 1-м файле:
+
+```javascript
+function plus(a, b) {
+  return a + b;
+}
+
+function minus(a, b) {
+  return a - b;
+}
+```
+
+Чтобы сделать их доступными в файле 2, экспортируем их:
+
+```javascript
+export {
+  plus, minus
+};
+```
+
+Во 2 файле получим их:
+
+```javascript
+import { plus, minus } from './file1';
+```
+
+Импортируемую функцию можно переименовать:
+
+```javascript
+import { plus as newFunc, minus } from './file1';
+
+newFunc();
+```
+
+Экспортируемую функцию так же можно переименовать:
+
+```javascript
+export {
+  plus as p, minus as m
+};
+```
+
+Можно импортировать не отдельные функции, а все что есть:
+
+```javascript
+import * as calc from './file1';
+
+calc.plus();
+calc.minus();
+```
+
+Экспорт по умолчанию:
+
+```javascript
+export default Graph;
+```
+
+Тогда при импорте можно не ставить скобки:
+
+```javascript
+import Graph from './file1';
+```
+
+Можно сразу переименовать, без 'as':
+
+```javascript
+import NewFunc from './file1';
+```
+
+Можно не экспортировать конкретные функции, а получить сайд-эффект с другого файла (все функции в нем отработают):
+
+```javascript
+import './file1';
+import './main.css';
+```
+
+Для импорта библиотеки используем только ее название (не путь):
+
+```javascript
+import joker from  'one-liner-joker';
+```
