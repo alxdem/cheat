@@ -540,3 +540,50 @@ import './main.css';
 ```javascript
 import joker from  'one-liner-joker';
 ```
+
+# React
+
+## Создание проекта
+
+Установка create-react-app на компьютер. Он даст нам правильно настроенный babel и Webpack со всеми нужными библиотеками:
+```javascript
+npm install -g create-react-app
+```
+
+Создание react-приложения (projectName - название новой папки с проектом):
+```javascript
+create-react-app projectName
+```
+
+### React элементы
+
+Элемент - самый маленький "кирпичик".
+Подключим React и ReactDom:
+```javascript
+import React from 'react';
+import ReactDOM from 'react-dom';
+```
+
+Помещаем в константу html-код, JSX-код:
+```javascript
+const el = <h1>Hello World</h1>;
+```
+
+Если код состоит из нескольких строк (element-tree), то оборачиваем его в скобки:
+```javascript
+const el = (
+  <div>
+    <h1>My Todo List</h1>
+    <input placeholder='search'/>
+    <ul>
+      <li>Learn React</li>
+      <li>Build App</li>
+    </ul>
+  </div>
+);
+```
+
+Рендерим его на странице. el - элемент, который выводим. 2-й параметр - место, куда выводим:
+```javascript
+ReactDOM.render(el, document.getElementById('root'));
+```
