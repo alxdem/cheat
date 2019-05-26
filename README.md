@@ -587,3 +587,137 @@ const el = (
 ```javascript
 ReactDOM.render(el, document.getElementById('root'));
 ```
+
+
+### React компонент
+
+Описание (Компонент начинается с большой буквы):
+```javascript
+const TodoList = () => {
+  return (
+    <ul>
+      <li>Learn React</li>
+      <li>Build App</li>
+    </ul>
+  );
+};
+```
+
+Вывод:
+```javascript
+<TodoList/>
+```
+
+Рендерить можно в элемент, но не в компонент (не в App, а в <App/>):
+```javascript
+const App = () => {
+  return(
+    <div>
+      <AppHeader/>
+      <SearchPanel/>
+      <TodoList/>
+    </div>
+  );
+};
+
+ReactDOM.render(<App/>, document.getElementById('root'));
+```
+
+### JSX
+
+Корнем JSX-фрагмента должен быть только 1 элемент (внтури него могут быть другие теги):
+
+Нельзя:
+```javascript
+const TodoList = () => {
+  return (
+    <span>text 1</span>
+    <span>text 2</span>
+  );
+};
+```
+
+Можно:
+```javascript
+const TodoList = () => {
+  return (
+    <div>
+      <span>text 1</span>
+      <span>text 2</span>
+    </div>
+  );
+};
+```
+
+Внутри JSX можно использовать переменные:
+```javascript
+const items = ['Petr', 'Ivan'];
+const TodoList = () => {
+  return (
+    <div>
+      <span>{ items[0] }</span>
+      <span>{ items[1] }</span>
+    </div>
+  );
+};
+```
+
+Можно использовать функции:
+```javascript
+<span>{ (new Date()).toString() }</span>
+```
+
+Теги:
+```javascript
+const loginBox = <span>Log in</span>
+
+const TodoList = () => {
+  return (
+    <div>
+      {loginBox} // Элемент
+      <AppHeader/> // Компонент
+      <SearchPanel/>
+      <TodoList/>
+    </div>
+  );
+};
+```
+
+Тернарный оператор:
+```javascript
+const isLogged = true;
+const loginBox = <span>Log in</span>
+
+const TodoList = () => {
+  return (
+    <div>
+      {isLogged ? null : loginBox} // null - не выведет ничего
+      <AppHeader/>
+      <SearchPanel/>
+      <TodoList/>
+    </div>
+  );
+};
+```
+
+Внутри компонентов можно передавать объекты в свойствах:
+```javascript
+const App = () => {
+  return(
+    <div>
+      <AppHeader/>
+      <SearchPanel/>
+      <TodoList items={['item1', 'item2']} />
+    </div>
+  );
+};
+```
+
+2 атрибута, которые отличаются от html (className, htmlFor):
+```javascript
+return(
+    <div>
+      <TodoList className='class1' htmlFor='label' />;
+    </div>
+  );
+```
