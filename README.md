@@ -721,3 +721,31 @@ return(
     </div>
   );
 ```
+
+
+### Структура React проекта
+
+В папке src создаем папку для компонентов components. В ней создаем файлы js под каждый компонент.
+В каждом компоненте подключаем React и экспортируем компонент:
+
+```javascript
+import React from "react";
+
+const AppHeader = () => {
+  return (
+    <h1>My Todo List</h1>
+  );
+};
+
+export default AppHeader;
+```
+
+В основной файл импортируем все компоненты. Указывать расширение файла не обязательно:
+```javascript
+import React from 'react';
+import ReactDOM from 'react-dom';
+
+import AppHeader from './components/app-header';
+import SearchPanel from './components/search-panel';
+import TodoList from './components/todo-list';
+```
