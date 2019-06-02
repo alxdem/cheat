@@ -749,3 +749,121 @@ import AppHeader from './components/app-header';
 import SearchPanel from './components/search-panel';
 import TodoList from './components/todo-list';
 ```
+
+
+### Props - свойства компонента
+
+Передается в каждую функцию. Внутри props будут названия всех свойст, которые вы передали объекту:
+```javascript
+const TodoListItem = (props) => {
+  return <span>{ props.label }</span>;
+};
+```
+
+Передаем свойства так (label):
+```javascript
+const TodoList = () => {
+  return (
+    <ul>
+      <li><TodoListItem label='Leadr React' /></li>
+      <li><TodoListItem label='Watch TV' /></li>
+    </ul>
+  );
+};
+```
+
+То же самое, используя деструктуризацию:
+```javascript
+const TodoListItem = ( { label } ) => {
+  return <span>{ label }</span>;
+};
+```
+
+Если свойство передано без значение, оно по умолчанию true:
+```javascript
+<ul>
+  <li><TodoListItem label='Leadr React' /></li>
+  <li><TodoListItem
+    label='Watch TV'
+    important /></li>
+</ul>
+```
+
+Если мы не передаем значение important, по-умолчанию будет false:
+```javascript
+const TodoListItem = ( { label, important = false } ) => {
+  const style = {
+    color: important ? 'tomato' : 'black'
+  };
+
+  return <span style={style}>{ label }</span>;
+};
+```
+
+### Массисы как свойства компонентов
+
+Получаем данные на самом верхнем уровне, в index.js:
+
+```javascript
+const App = () => {
+
+  const todoDate = [
+    { label: 'Drink coffee', important: false },
+    { label: 'Watch TV', important: true },
+    { label: 'Do React App', important: false },
+  ];
+
+  return(
+    <div>
+      <span>{ (new Date()).toString() }</span>
+      <AppHeader/>
+      <SearchPanel/>
+      <TodoList todos={todoDate} />
+    </div>
+  );
+};
+```
+
+Для каждого элемента создаем JSX-элемент. Выводим список элементов:
+
+```javascript
+const TodoList = ( {todos} ) => {
+
+  const elements = todos.map((item => {
+    return (
+      <li>
+        <TodoListItem
+          label={item.label}
+          important={item.important}/>
+      </li>
+    );
+  }));
+
+  return (
+    <ul>
+      { elements }
+    </ul>
+  );
+};
+```
+
+Еще проще: взять каждое свойство из объекта item и передать его в качестве атрибута вместе со значение в TodoListItem:
+
+```javascript
+const TodoList = ( {todos} ) => {
+
+  const elements = todos.map((item => {
+    return (
+      <li>
+        <TodoListItem {...item}/>
+      </li>
+    );
+  }));
+
+  return (
+    <ul>
+      { elements }
+    </ul>
+  );
+};
+```
