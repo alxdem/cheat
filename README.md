@@ -867,3 +867,57 @@ const TodoList = ( {todos} ) => {
   );
 };
 ```
+
+### Коллекции и ключи
+
+Чтобы React не ругался на массив жлементов, нужно каждому элементу добавить уникльный ключ. Нужно для того, чтобы React обновлял только те элементы, которые изменились:
+
+Добавим уникальный id каждому элементу. При получении данных с сервера, id уже будет передан:
+```javascript
+const todoDate = [
+    { label: 'Drink coffee', important: false, id: 1 },
+    { label: 'Watch TV', important: true, id: 2 },
+    { label: 'Do React App', important: false, id: 3 },
+  ];
+```
+
+Добавим id:
+```javascript
+return (
+      <li key={item.id}>
+        <TodoListItem {...item}/>
+      </li>
+    );
+```
+
+Индекс элементов в качестве key лучше не использовать - он не дает выигрыша в производительнсоти.
+
+Чтобы не передавать лишнее свойство в компонент TodoListItem:
+```javascript
+<li key={item.id}>
+  <TodoListItem {...item}/> // Лишнее свойство передается здесь
+</li>
+```
+
+Воспользуемся деструктуризацией:
+
+```javascript
+<li key={item.id}>
+  <TodoListItem {...item}/> // Лишнее свойство передается здесь
+</li>
+```
+
+Делаем так:
+
+```javascript
+const elements = todos.map((item => {
+
+    const { id, ...itemProps } = item; // Достаем id из объекта item. itemProps - все остальные свойста, которые не были деструктурированы в id
+
+    return (
+      <li key={id}>
+        <TodoListItem {...itemProps }/>
+      </li>
+    );
+  }));
+```
