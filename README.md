@@ -961,3 +961,57 @@ import AppHeader from './components/app-header';
 ```javascript
 import TodoListItem from '../todo-list-item';
 ```
+
+### Компоненты-классы
+
+Классы используются когда у компонента должно быть внутреннее состояние
+
+У класса, в отличие от функции, пропсы хранятся в свойстве this.props.
+
+```javascript
+import React, { Component } from 'react';
+
+import './todo-list-item.css';
+
+export default class TodoListItem extends Component {
+
+  render() {
+
+    const { label, important = false } = this.props;
+
+    const style = {
+      color: important ? 'steelblue' : 'black',
+      fontWeight: important ? 'bold' : 'normal'
+    };
+
+    return (
+      <span className="todo-list-item">
+      <span
+        className="todo-list-item-label"
+        style={style}>
+        {label}
+      </span>
+
+      <button type="button"
+              className="btn btn-outline-success btn-sm float-right">
+        <i className="fa fa-exclamation" />
+      </button>
+
+      <button type="button"
+              className="btn btn-outline-danger btn-sm float-right">
+        <i className="fa fa-trash-o" />
+      </button>
+    </span>
+    );
+  }
+}
+```
+
+Как решить что использовать: компонент-функцию или компонент-класс?
+1. Если я сразу не вижу причин использовать класс - то пишем функцию;
+2. Позже всегода можно изменить функцию на класс.
+
+Тазисы:
+1. Классы используются, когда нужно хранить сосотяние;
+2. Классы наследуют React.Component;
+3. props доступен через this.props.
