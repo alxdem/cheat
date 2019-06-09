@@ -921,3 +921,43 @@ const elements = todos.map((item => {
     );
   }));
 ```
+
+### Импорт CSS
+
+Быстрое подключение bootstrapcdn: https://www.bootstrapcdn.com/
+
+Чтобы подключить css, нужное его импортировать в js-файл:
+```javascript
+import './todo-list.css';
+```
+
+Webpack собирает css и преобразует его.
+
+### Структура проекта
+
+Для каждого компонента - своя папка.
+
+В index.js мы должны заменить пути на ./имя папки/имя компонента:
+```javascript
+import AppHeader from './components/app-header/app-header';
+```
+
+Чтобы не писать дважды имя пакпи и компонента, Webpack по умолчанию ищет внутри файл index.js.
+Создадим внутри папки компонента файл index.js:
+```javascript
+import AppHeader from './app-header';
+
+export default AppHeader;
+```
+
+Теперь в основном index.js можно импортировать компоненты так:
+```javascript
+import AppHeader from './components/app-header';
+```
+
+Если браузер выдает ошибку - перезапусти сборщик
+
+Найти файл на 1 уровень выше (вместо одной точки ставим 2):
+```javascript
+import TodoListItem from '../todo-list-item';
+```
