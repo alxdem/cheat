@@ -1015,3 +1015,86 @@ export default class TodoListItem extends Component {
 1. Классы используются, когда нужно хранить сосотяние;
 2. Классы наследуют React.Component;
 3. props доступен через this.props.
+
+### Обработка событий
+
+Добавляем к элементу событие:
+
+```javascript
+<span
+    className="todo-list-item-label"
+    style={style}
+    onClick={ ()=> console.log(`Done ${label}`) }>
+    {label}
+</span>
+```
+
+Контекст можно привязать с помощью bind:
+
+```javascript
+this.onLabelClick.bind(this)
+```
+
+Удобнее создать отдельную функцию и передать ее в onClick.
+constructor нужен чтобы передать правильный this:
+
+```javascript
+  constructor() {
+    super(); // Должны вызвать конструктор суперкласса (родителя), в данном случае это Component
+
+    this.onLabelClick = () => {
+      console.log(`Done: ${this.props.label}`);
+    };
+  }
+  
+  
+    <span
+        className="todo-list-item-label"
+        style={style}
+        onClick={ this.onLabelClick } >
+        {label}
+    </span>
+```
+
+### State - состояние компонета
+
+Используем классы вместо функция для того, чтобы хранить внутреннее состояние компонетов. Функции этого не умеют
+
+Установить state можно только один раз:
+```javascript
+this.state = {
+  done: false
+};
+```
+
+Менять его можно только с помощью функции setState:
+```javascript
+this.onLabelClick = () => {
+  this.setState({
+    done: true
+  });
+};
+```
+
+### Как работает setState
+
+Чтобы изменить одно значение state, нужно его передать. При этом другие значение не перезапишутся:
+```javascript
+this.state = {
+  done: false,
+  important: false
+};
+
+this.onLabelClick = () => {
+  this.setState({
+    done: true
+  });
+};
+
+this.onMarkImportant = () => {
+  console.log('kkk');
+  this.setState({
+    important: true
+  });
+}
+```
