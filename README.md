@@ -1098,3 +1098,56 @@ this.onMarkImportant = () => {
   });
 }
 ```
+
+
+### Обновление состояния
+
+Setstate принимает функцию;
+Аргумент - текущий state
+
+Чтобы переключать свойства в зависимости от состояния:
+```javascript
+    this.onMarkImportant = () => {
+      console.log('kkk');
+      this.setState((state) => {
+        return {
+          important: !state.important
+        };
+      });
+    }
+```
+
+То же самое, но с деструктуризацией:
+```javascript
+    this.onMarkImportant = () => {
+      console.log('kkk');
+      this.setState(({important}) => {
+        return {
+          important: !important
+        };
+      });
+    }
+```
+
+### Собственные события
+
+Чтобы из одного элемента вызвать функцию в другом элементе:
+Родительский элемент (функция onDeleted):
+```javascript
+  <li key={id} className="list-group-item">
+    <TodoListItem
+      {...itemProps }
+      onDeleted={() => console.log('Deleted')}
+    />
+  </li>
+```
+
+Дочерний элемент (вызываем с помощью onClick):
+```javascript
+<button type="button"
+        className="btn btn-outline-danger btn-sm float-right"
+        onClick={this.props.onDeleted}
+        >
+  <i className="fa fa-trash-o" />
+</button>
+```
