@@ -1151,3 +1151,44 @@ Setstate принимает функцию;
   <i className="fa fa-trash-o" />
 </button>
 ```
+
+### Удаление элемента
+
+Перепишем App из функции в класс, чтобы можно было менять состояние.
+
+```javascript
+state = {
+    todoData: [
+      { label: 'Drink Coffee', important: false, id: 1 },
+      { label: 'Make Awesome App', important: true, id: 2 },
+      { label: 'Have a lunch', important: false, id: 3 }
+    ]
+  };
+
+  deleteItem = (id) => {
+    this.setState(({ todoData }) => {
+
+      const idx = todoData.findIndex((el) => el.id === id);
+      const before = todoData.slice(0, idx);
+      const after = todoData.slice(idx + 1);
+      const newArray = [...before, ...after];
+
+      return {
+        todoData: newArray
+      };
+
+    });
+  };
+```
+
+### Добавление элемента
+
+Добавить элемент в конец массива:
+```javascript
+const newArr = [ ...oldArray, newItem];
+```
+
+В конец:
+```javascript
+const newArr = [ newItem, ...oldArray];
+```
