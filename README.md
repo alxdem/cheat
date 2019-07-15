@@ -1197,3 +1197,33 @@ const newArr = [ newItem, ...oldArray];
 
 Если данные нужно использовать в нескольких компонентах - хранить их нужно в родительском компоненте
 Чтобы поднять данные вверх по иерархии используем события
+
+### SetState - обновление элементов
+
+Обновляем список данных. 
+1. Копируем изменяемый объект (Меняем в нем нужное свойство done: !oldItem.done)
+2. Копируем массив с объектами
+3. Удаляем из нового массива элемент по id
+4. На его место вставляем новый элемент
+5. Отправляем новые данные в state
+
+```javascript
+onToggleDone = (id) => {
+    this.setState(({ todoData }) => {
+        const idx = todoData.findIndex((el) => el.id === id);
+        
+        const oldItem = todoData[idx];
+        const newItem = {...oldItem, done: !oldItem.done};
+        
+        const newArray = [
+            ...todoData.slice(0, idx),
+            newItem,
+            ...todoData.slice(idx + 1)
+        ];
+        
+        return {
+          todoData: newArray
+        };
+    });
+};
+```
