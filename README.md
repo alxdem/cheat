@@ -1227,3 +1227,42 @@ onToggleDone = (id) => {
     });
 };
 ```
+
+### Работа с формами
+
+### Контролируемые компоненты
+
+### Поиск
+
+Добавляем в state новый элемент term, в нем храним текст для поиска
+```javascript
+state = {
+    todoData: [
+      this.createTodoItem('Drink Coffee'),
+      this.createTodoItem('Make Awesome App'),
+      this.createTodoItem('Have a lunch'),
+    ],
+    term: ''
+  };
+```
+
+Отфильтруем все элементы, которые содержать строку term:
+```javascript
+search = (items, term) => {
+
+    if(term.length === 0) {
+      return items;
+    }
+
+    return items.filter((item) => {
+      return item.label.indexOf(term) > -1;
+    });
+  };
+```
+
+Меняем term при вводе текста:
+```javascript
+onSearchChange = (term) => {
+    this.setState( {term} );
+  };
+```
