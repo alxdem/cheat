@@ -1399,7 +1399,7 @@ constructor() {
 
 1. Mounting (вызывает эту функцию, когда компонент создается и отображается первый раз)
 constructor() => render() => componentDidMount()
-2. Updates (компонент уже отобразился и работает и может получать обновления)
+2. Updates (компонент уже отобразился и работает и может получать обновления. Вызывается, когда компонент обновился или получил новое свойство)
 New props / setState() = > render() => componentDidUpdate()
 3. Unmounting (вызывается перед удалением компонента)
 componentWillUnmount()
@@ -1408,3 +1408,20 @@ componentDidCatch()
 
 ### componentDidMount
 Вызывать функции в componentDidMount, а не конструкторе
+
+### componentDidUpdate
+Вызывается, когда компонент обновился или получил новое свойство
+
+Принимает 2 свойства:
+componentDidUpdate(prevProps, prevState)
+prevProps - предыдущая версия пропс
+prevState - предыдущая версия state
+
+```javascript
+componentDidUpdate(prevProps) {
+    // Важно! Проверять текущий и прошлый state, иначе это будет бесконечный цикл: каждая смена state вызывает CDU, а он - смену state
+    if(this.props.personId !== prevProps.personId) {
+      this.updatePerson();
+    }
+  }
+```
