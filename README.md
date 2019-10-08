@@ -1011,7 +1011,7 @@ export default class TodoListItem extends Component {
 1. Если я сразу не вижу причин использовать класс - то пишем функцию;
 2. Позже всегода можно изменить функцию на класс.
 
-Тазисы:
+Тезисы:
 1. Классы используются, когда нужно хранить сосотяние;
 2. Классы наследуют React.Component;
 3. props доступен через this.props.
@@ -1266,3 +1266,145 @@ onSearchChange = (term) => {
     this.setState( {term} );
   };
 ```
+
+## Работа с сервером
+
+### Выбор HTTP API
+
+XMLHTTPRequest - устарел
+Fetch API - современный
+
+Библиотеки для работы с API:
+1. Axios
+2. Superagent
+3. Got
+4. Request
+5. Reqwest
+
+
+### Как работает Fetch API
+
+Делаем запрос к серверу и получаем ответ сервера. Сначала получаем результат, а затем вытаскиваем тело из результата:
+```javascript
+fetch('https://swapi.co/api/people/1/')
+  .then((response) => {
+    return response.json();
+  })
+  .then((body) => {
+    console.log(body);
+  })
+```
+
+Тот же код, через функцию:
+```javascript
+const getResource = async (url) => {
+  const res = await fetch(url) // await - ждем результат промиса
+  const body = await res.json();
+  return body;
+};
+
+getResource('https://swapi.co/api/people/1/')
+  .then((body) => {
+    console.log(body);
+  });
+
+fetch('https://swapi.co/api/people/1/')
+  .then((response) => {
+    return response.json();
+  })
+  .then((body) => {
+    console.log(body);
+  })
+```
+
+### Обработка ошибок в Fetch API
+
+Получаем ошибку, если нет соединения или лег сервер:
+```javascript
+// Если нет интернета, лег сервер
+  .catch((err) => {
+    console.error(err);
+  });
+```
+
+Если вервер прислал ответ, но с ошибкой:
+```javascript
+const getResource = async (url) => {
+  const res = await fetch(url) // await - ждем результат промиса
+  
+  // Здесь обрабатываем ошибку. res.ok - булево значение. res.status - код ошибки
+  if(!res.ok) {
+    throw new Error(`Could not Fetch ${url}, received ${res.status}`);
+  }
+
+  const body = await res.json();
+  return body;
+};
+```
+
+### Создаем клиент для  API
+
+1. Создаем для этого класс, чтобы изолировать от остального кода.
+2. Компоненты не должны знать откуда берется код.
+
+```javascript
+class SwapiService {
+
+  _apiBase = 'https://swapi.co/api'; // Начинаем с нижнего подчеркивания, т. к. это приватная часть и ее не следует изменять внешне
+
+  async getResource(url) {
+    const res = await fetch(`${this._apiBase}${url}`); // await - ждем результат промиса
+
+    if(!res.ok) {
+      throw new Error(`Could not Fetch ${url}` +
+        `received ${res.status}`);
+    }
+
+    return await res.json();
+  }
+
+  async getAllPeople() {
+    const res = await this.getResource(`/people/`);
+    return res.results;
+  }
+
+  getPerson(id) {
+    return this.getResource(`/people/${id}/`);
+  }
+}
+
+const swapi = new SwapiService();
+
+swapi.getPerson(4).then((people) => {
+  console.log(people.name);
+});
+```
+
+### Компонент, который получает данные с сервера
+
+Чтобы обновить данные в компоненте, вызываем нужную функцию в конструкторе когда он создается:
+
+```javascript
+constructor() {
+    super();
+    this.updatePlanet();
+  }
+```
+
+### Трансформация данных API
+
+
+
+## Жизненный цикл компонентов
+
+1. Mounting (вызывает эту функцию, когда компонент создается и отображается первый раз)
+constructor() => render() => componentDidMount()
+2. Updates (компонент уже отобразился и работает и может получать обновления)
+New props / setState() = > render() => componentDidUpdate()
+3. Unmounting (вызывается перед удалением компонента)
+componentWillUnmount()
+4. Error (когда компонент получает ошибку)
+componentDidCatch()
+
+### componentDidMount
+Вызывать функции в componentDidMount, а не конструкторе
