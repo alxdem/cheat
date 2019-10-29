@@ -1443,3 +1443,80 @@ componentDidUpdate(prevProps) {
 componentDidCatch(error, info):
 error - ошибка, которая привела к вызову метода
 info - детали в каком компоненте произошла ошибка
+
+## Паттерны
+
+### Функции
+
+Можно передавать функцию в компонент. Здесь получаем список элементов по API:
+```javascript
+ <ItemList
+  onItemSelected={this.onPersonSelected}
+  getData={this.swapiService.getAllStarships}
+/>
+```
+
+### Render-функции
+Рендер-функция - функция, которую передаем в компонент. Она занимается рендерингом части или всего компонента.
+
+Передаем в компонент функцию renderItem:
+```javascript
+<ItemList
+  onItemSelected={this.onPersonSelected}
+  renderItem={({name, model}) => `${name} (${model})`}
+/>
+```
+
+Внутри функции помещаем результат выполнения функции в label и просто выводим его:
+```javascript
+const label = this.props.renderItem(item);
+return (
+<li className="list-group-item">
+  {label}
+</li>
+);
+```
+Функция может возвращать как строку, так и React-компонент.
+```javascript
+renderItem={({name}) => (<span>{name} <button>!</button></span>)}
+```
+
+### Свойства-элементы
+Элемент-контейнер принимает разные данные и оборвчивает их в заданную структуру.
+
+Элемент-контейнер:
+```javascript
+const Row = ({left, right}) => {
+  return (
+    <div className="row mb2">
+      <div className="col-md-6">
+        {left}
+      </div>
+      <div className="col-md-6">
+        {right}
+      </div>
+    </div>
+  );
+};
+```
+
+Передаем в него данные:
+```javascript
+render() {
+  const itemList = (
+    <ItemList
+      onItemSelected={this.onPersonSelected}
+      getData={this.swapiService.getAllPeople}
+      renderItem={({name, gender, birthYear}) => `${name} (${gender}, ${birthYear})`}
+    />
+    );
+    
+    const personDetails = (
+    <PersonDetails personId={this.state.selectedPerson} />
+    );
+      
+  return (
+    <Row left={itemList} right={personDetails}/>
+  );
+}
+```
