@@ -1520,3 +1520,88 @@ render() {
   );
 }
 ```
+
+### Children
+
+this.props.children; - можно передать любой тип данных: строка, объект, функция.
+```javascript
+<ItemList>
+  {[1, 2, 4]}
+</ItemList>
+```
+
+## Routing
+
+На самом деле мы не переходим с одной страницы на другую, мы остаемся все время на одной странице, мы просто говорим какие компоненты скрыть и какие показать
+
+### Установка
+yarn add react-router-dom
+
+React Router - не часть React, есть и другие библиотеки.
+
+Подключаем:
+```javascript
+import { BrowserRouter, Route} from 'react-router-dom';
+```
+
+Оборачиваем все что мы будем выводить в компонент Router:
+```javascript
+return (
+      <Router>
+        <div className="stardb-app">
+          <Header />
+          ...
+      </Router>
+```
+
+Внутри компонент Route. У него 2 свойства:
+1. path - путь;
+2. component - какой компонент отображать при выбранном пути (По сути, компонент - наша страница, на которой мы выводим другие компоненты).
+
+```javascript
+<Router>
+  <Route path="/main" component={MainPage}/>
+  <Route path="/people" component={PeoplePage}/>
+</Router>
+```
+
+### Link (Переключение страниц)
+
+Импортируем Link в том компоненте, где мы будем выводить ссылки на страницы
+```javascript
+import { Link } from 'react-router-dom';
+```
+
+Заменяем теги <a> на компонент <Link>:
+```html
+<a href="#/people">People</a> // Было
+<Link to='/people'>People</Link>  // Стало
+```
+
+Используем компонент <Link> вместо обычной ссылки для того, чтобы при переходе на другую страницу не ререзагружать страницу
+
+### Как работает Route
+В компонент Route можно передевать рендер-функцию:
+
+```html
+<Route path="/" render={() => <h2>Welcome to StarDB</h2> }/>
+```
+Когда React Router проверяет какие компоненты нужно отобразить, он отвечает на вопрос, содержит ли текущий адрес тот путь, который указан в path. Например, путь '/' содержится в '/people'.
+
+Чтобы проверять точный адрес, передадим пропс exact={true}:
+```javascript
+<Route
+    path="/"
+    render={() => <h2>Welcome to StarDB</h2> }
+    exact={true}
+/>
+```
+
+Для одной страницы можно выводить разные комбинации:
+```javascript
+<Route
+    path="/people"
+    render={() => <h2>People</h2> }
+/>
+<Route path="/people" component={PeoplePage}/>
+```
