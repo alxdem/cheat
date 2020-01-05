@@ -1605,3 +1605,130 @@ import { Link } from 'react-router-dom';
 />
 <Route path="/people" component={PeoplePage}/>
 ```
+
+### Динамические пути
+
+В Route можно добавлять динамический параметр (:id):
+```javascript
+<Route path="/starships/:id" component={PeoplePage}/>
+```
+
+В рендер-функцию React-Router передаст 3 параметра: 
+match - как именно совпал path с адресом в браузере. Здесь есть параметр id
+location - текущее положение роутера на текущей странице
+history - внутренний api Router, для перехода внутри страниц
+
+```javascript
+<Route path="/starships/:id"
+     render={({match, location, history}) => {
+       return <StarshipDetails/>
+     }}
+/>
+```
+
+### withRouter
+В Реакте лучше использовать компоненты-функции, нежели компоненты-классы. Как только компоненту не нужен state - переделываем его в функцию.
+
+Когда мы используем Route вместе с компонентом, роутер не будет автоматически добавлять в свойства этого компонента объекты match, location, history.
+Чтобы получить доступ к ним, нужно использовать компонент высшего порядка, который использует контекст внутри себя.  
+
+Импортируем withRouter (компонент высшего порядка):
+```javascript
+import { withRouter } from 'react-router-dom';
+```
+
+Возвращаем withRouter и передаем в него наш компонент:
+```javascript
+export default StarshipsPage; // Было
+export default withRouter(StarshipsPage); // Стало
+```
+
+Теперь withRouter передаст в StarshipsPage объекты match, location, history.
+
+Нам нужен объект history.
+Чтобы переключить страницу нужно вызвать метод history.push():
+```javascript
+const StarshipsPage = ({ history }) => {
+    return (
+      <StarshipList
+        onItemSelected={(itemId) => {
+          history.push(`/starships/${itemId}`);
+        }}
+      />
+    );
+};
+
+export default withRouter(StarshipsPage);
+```
+
+### Относительные пути
+Как формируются пути в вебе:
+```javascript
+/starships/ + 5 = /starships/5
+/starships  + 5 = /5
+```
+В первом случае путь указывает на папку(/), а во втором на файл
+
+Заменим ссылки:
+```javascript
+<Link to="/people">People</Link> // Было
+<Link to="/people/">People</Link> // Стало
+```
+
+Адреса промежуточных страниц должны заканчиваться на слэш /
+
+### Опциональные параметры
+
+Если в конце добавить '?', то параметр будет считаться опциональным:
+```javascript
+<Route path="/people/:id" component={PeoplePage} /> // Так, при переходе по адресу /people/ PeoplePage не отобразиться
+<Route path="/people/:id?" component={PeoplePage} /> // А так, отобразится
+```
+
+### Авторизация и закрытые страницы
+Redirect - компонент React для перенаправления на другую страницу:
+```javascript
+import { Redirect } from 'react-router-dom';
+
+return <Redirect to={'/login'} />;
+```
+
+### Обработка несуществующих адресов (Switch)
+
+Импортируем switch:
+```javascript
+import { BrowserRouter as Router, Route, Redirect, Switch } from 'react-router-dom';
+```
+
+Обернем в Switch все существующие роуты:
+```javascript
+<Switch>
+    <Route path="/"
+           render={() => <h2>Welcome to StarDB</h2>}
+           exact />
+    <Route path="/people/:id?" component={PeoplePage} />
+    <Redirect to='/'/>
+</Switch>
+```
+Когда Switch пройдет все варианты и ни на одном не остановится, выполним Redirect.
+Внутри Switch будет отрисован максимум один элемент.
+
+Вместо редиректа можно выводить сообщение на той же странице. Rout без path будет срабатывать всегда.
+```javascript
+<Route render={() => <h2>Page not found</h2>} />
+```
+
+## Redux
+
+### Введение
+
+Property Drill (State в самом верхнем компоненте) - проблема в React, когда для того, чтобы обновить состояние из самого нижнего компонента, нужно было поднимать событие в самый верхний по цепочке компонентов.
+
+Fragmented state (State у кахдого компонента) - сложно масштабировать, легко поломать.
+
+Делаем одни глобальный стейт, и, в то же время, делаем его доступным для каждого компонента независимо от уровня вложенности
+Запретим компонентам писать в глобальный стейт, только читать.
+Всю логику по обновлению Стейта вынесем в отдельную функцию-reducer.
+Компоненты могут создавать события (Actions), которые передаем в функцию-reducer.
+
+<img src="/pics/1.jpg" alt="Работа Redux" />
