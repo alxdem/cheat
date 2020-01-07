@@ -1732,3 +1732,98 @@ Fragmented state (State у кахдого компонента) - сложно �
 Компоненты могут создавать события (Actions), которые передаем в функцию-reducer.
 
 <img src="/pics/1.jpg" alt="Работа Redux" />
+
+### Установка библиотек
+
+С Redux можно работать без React.
+Устанавливаем:
+```javascript
+npx create-react-app my-app // npx
+npm init react-app my-app // npm
+yarn create react-app project-name // yarn
+```
+
+Установим 2 библиотеки: 
+1. redux
+2. react-redux - библиотека, упрощает работу с React
+```javascript
+yarn add redux react-redux
+```
+
+### Reducer
+Reducer - функция, которая получает 2 значения: текущий state и действие, которую нужно совершить (action)
+1. Если изначального state нет, то присвоим ему 0
+2. action - объект. Главное, чтобы у него всегда было поле type.
+
+Принцип reducer на чистом JS:
+```javascript
+const reducer = (state = 0, action) => {
+
+  switch (action.type) {
+    case 'INC':
+      return state + 1;
+
+    // Если не распознали action.type, возвратим прежний state
+    default:
+      return state;
+  }
+};
+
+let state = reducer(undefined, {});
+
+state = reducer(state, { type: 'INC' });
+console.log(state); // 1
+state = reducer(state, { type: 'INC' });
+console.log(state); // 2
+```
+
+### Redux Store
+Redux Store - это Reducer и State
+
+```javascript
+import { createStore } from 'redux';
+
+const reducer = (state = 0, action) => {
+
+  switch (action.type) {
+    case 'INC':
+      return state + 1;
+
+    // Если не распознали action.type, возвратим прежний state
+    default:
+      return state;
+  }
+};
+
+const store = createStore(reducer);
+
+// Вызываю функцию, когда store изменился
+store.subscribe(() => {
+  console.log(store.getState());
+});
+
+store.dispatch({type: 'INC'}); // Выполним действие
+store.dispatch({type: 'INC'});
+```
+
+Создаем Store:
+```javascript
+const store = createStore(reducer);
+```
+
+Получить текущий state:
+```javascript
+store.getState();
+```
+
+Вызвать действие:
+```javascript
+store.dispatch({type: 'INC'});
+```
+
+Подписаться на обновления store:
+```javascript
+store.subscribe(() => {
+  console.log(store.getState());
+});
+```
