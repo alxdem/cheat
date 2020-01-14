@@ -1827,3 +1827,74 @@ store.subscribe(() => {
   console.log(store.getState());
 });
 ```
+
+### Чистые функции
+- Возвращаемое значение зависит только от аргументов
+- У функции нет побочных эффектов (она должна только возвразать результат. Не записывать в базу, не менять кэш, стейт, не влиять на другую функцию, менять DOM, вызывать сервер)
+
+Функция-редьюсер - должна быть чистой функцией!
+
+### UI для Redux
+```javascript
+import { createStore } from 'redux';
+
+const reducer = (state = 0, action) => {
+  switch (action.type) {
+    case 'INC':
+      return state + 1;
+
+    case 'DEC':
+      return state - 1;
+
+    default:
+      return state;
+  }
+};
+
+const store = createStore(reducer);
+
+document.getElementById('inc').addEventListener('click', () => {
+    store.dispatch({type: 'INC'});
+  });
+document.getElementById('dec').addEventListener('click', () => {
+    store.dispatch({type: 'DEC'}); // Обновдяем состояние
+  });
+
+const update = () => {
+  document.getElementById('counter').innerHTML = store.getState();
+};
+
+store.subscribe(update); // Подписываем функцию update на изменения стейта
+```
+
+### Действия с параметрами
+Для передачи параметра:
+```javascript
+const reducer = (state = 0, action) => {
+
+  switch (action.type) {
+    case 'RND':
+      return state + action.payload; // Добавляем на параметр
+
+    // Если не распознали action.type, возвратим прежний state
+    default:
+      return state;
+  }
+};
+
+const store = createStore(reducer);
+
+document.getElementById('rnd').addEventListener('click', () => {
+    const payload = Math.floor(Math.random() * 10);
+    store.dispatch({
+      type: 'RND',
+      payload // Передаем доп. параметры
+    });
+  });
+
+const update = () => {
+  document.getElementById('counter').innerHTML = store.getState();
+};
+
+store.subscribe(update); // Подписываем функцию update на изменения стейта
+```
