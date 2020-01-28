@@ -1898,3 +1898,34 @@ const update = () => {
 
 store.subscribe(update); // Подписываем функцию update на изменения стейта
 ```
+
+### Action Creator
+Action Creator - функции-создатели действий. Нужны для удобства.
+
+Вместо того, чтобы каждый раз передавать объект с длинным названием (в котором можно сделать опечатку), можно поместить объект в функцию конструктор:
+```javascript
+const inc = () => ({ type: 'INC' });
+
+document
+  .getElementById('inc')
+  .addEventListener('click', () => {
+    store.dispatch(inc()); // Здесь возвращаем наш объект
+  });
+```
+
+### Структура проекта
+- Выносим action creator в отдельный файл
+- Выносим Reducer в отдельный файл
+
+В файл actions.js:
+```javascript
+export const inc = () => ({ type: 'INC' });
+export const dec = () => ({ type: 'DEC' });
+export const rnd = (payload) => ({ type: 'RND', payload });
+```
+
+Импортируем их:
+```javascript
+import reducer from './reducer';
+import { inc, dec, rnd } from './actions';
+```
