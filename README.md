@@ -1929,3 +1929,49 @@ export const rnd = (payload) => ({ type: 'RND', payload });
 import reducer from './reducer';
 import { inc, dec, rnd } from './actions';
 ```
+
+### bindActionCreators()
+
+bindActionCreators() - связывает функцию action creator с функцией dispatch()
+```javascript
+const { inc, dec, rnd } =bindActionCreators(actions);
+```
+
+Сократим код, деструктурировав dispatch:
+```javascript
+const store = createStore(reducer);
+const { dispatch } = store;
+
+document
+  .getElementById('inc')
+  .addEventListener('click', () => {
+    store.dispatch(inc()); // Было
+    dispatch(inc()); // Стало
+  });
+```
+
+Можно вынести 2 функции в одну:
+```javascript
+const store = createStore(reducer);
+const { dispatch } = store;
+const incDispatch = () => dispatch(inc());
+const rndDispatch = (payload) => dispatch(rnd(payload));
+
+document
+  .getElementById('inc')
+  .addEventListener('click', incDispatch);
+
+document
+  .getElementById('rnd')
+  .addEventListener('click', () => {
+    const payload = Math.floor(Math.random() * 10);
+    rndDispatch(payload);
+  });
+```
+
+Эта функция будет возвращать новую функцию
+
+Импортируем bindActionCreators:
+```javascript
+import { createStore, bindActionCreators } from 'redux';
+```
