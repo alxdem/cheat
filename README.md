@@ -1975,3 +1975,53 @@ document
 ```javascript
 import { createStore, bindActionCreators } from 'redux';
 ```
+
+### React и Redux
+
+Устанавливаем react-redux
+store.subscribe(update) - сообщает, что store обновился
+
+### React-Redux и функция connect()
+Импортируем провайдер:
+```javascript
+import { Provider } from 'react-redux';
+```
+
+Оборачиваем все в  Provider и передаем ему наш store:
+```javascript
+<Provider store={store}>
+  <App/>
+</Provider>
+```
+
+Provider делает store доступным всему дереву компонентов
+
+Функцию connect вызываем в том компоненте, где хотим поменять store. При эскпорте оборачиваем наш компонент в connect и передаем параметры
+```javascript
+import { connect } from 'react-redux';
+...
+export default connect()(Counter);
+```
+
+Connect - компонент высшего порядка, которая передает значения из Store в компонент
+
+Функция, которая получит текущий state из Redux Store:
+```javascript
+import { connect } from 'react-redux';
+...
+export default connect()(Counter);
+```
+
+### mapDispatchToProps()
+mapDispatchToProps - второй аргумент для функции connect();
+```javascript
+const mapDispatchToProps = (dispatch) => {
+  return {
+    inc: () => dispatch({ type: 'INC' })
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Counter);
+```
+
+
